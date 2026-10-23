@@ -1,0 +1,52 @@
+-- Connect with the target DB already selected (DB_NAME in .env, or `mysql -D dbname`).
+-- The CREATE DATABASE / USE lines were removed so this works against any DB name
+-- on shared hosting where the app user can't CREATE DATABASE.
+
+CREATE TABLE IF NOT EXISTS scrapy (
+  id                 BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  -- Client-facing columns
+  url_source         VARCHAR(512) NOT NULL,
+  listing_code       VARCHAR(32)  NOT NULL UNIQUE,
+  title              VARCHAR(512) NULL,
+  slug               VARCHAR(255) NULL,
+  description        MEDIUMTEXT   NULL,
+  footer_disclaimer  TEXT         NULL,
+  price              DECIMAL(18,2) NULL,
+  acreage            DECIMAL(10,2) NULL,
+  bedrooms           INT          NULL,
+  bathrooms          INT          NULL,
+  property_type      VARCHAR(128) NULL,
+  legal_type         VARCHAR(128) NULL,
+  news_type          VARCHAR(128) NULL,
+  interior           VARCHAR(128) NULL,
+  date_posted        VARCHAR(64)  NULL,
+  posted_by          VARCHAR(128) NULL,
+  hidden_number      VARCHAR(64)  NULL,
+  phone_number       VARCHAR(64)  NULL,
+  agent_id           VARCHAR(32)  NULL,
+  agent_url          VARCHAR(512) NULL,
+  location_city      VARCHAR(128) NULL,
+  location_province  VARCHAR(128) NULL,
+  listing_type       VARCHAR(32)  NULL,
+  thumbnail_paths    JSON         NULL,
+  large_image_paths  JSON         NULL,
+  created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- Auxiliary (kept for completeness / debugging)
+  price_raw          VARCHAR(64)  NULL,
+  direction          VARCHAR(64)  NULL,
+  address            TEXT         NULL,
+  ward               VARCHAR(128) NULL,
+  street             VARCHAR(256) NULL,
+  latitude           DECIMAL(10,7) NULL,
+  longitude          DECIMAL(10,7) NULL,
+  expires_at_raw     VARCHAR(64)  NULL,
+  category           VARCHAR(64)  NULL,
+  last_seen_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_url_source (url_source(255)),
+  INDEX idx_property_type (property_type),
+  INDEX idx_listing_type  (listing_type),
+  INDEX idx_price         (price),
+  INDEX idx_acreage       (acreage),
+  INDEX idx_location      (location_city, location_province),
+  INDEX idx_last_seen     (last_seen_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -1,0 +1,8 @@
+playwright>=1.45
+patchright>=1.45
+python-dotenv>=1.0
+pymysql>=1.1
+psycopg[binary]>=3.1
+certifi>=2024.2.2
+Pillow>=10.0
+deep-translator>=1.11

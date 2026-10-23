@@ -1,0 +1,28 @@
+# Secrets
+.env
+.claude/
+data/*.csv
+
+# Virtual environments
+.venv/
+.venv-mac/
+
+# Playwright persistent contexts (cookies, cache)
+.pw-data/
+.pw-data-scraper/
+.pw-data-scraper-*/
+.pw-data-acct-*/
+.pw-probe-*/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Runtime output (scraped data, debug HTML, logs)
+inspect/
+logs/
+*.log
+
+# OS noise
+.DS_Store

@@ -126,7 +126,7 @@ async def main():
 
                 if not res.get("latitude"):
                     # Try scrolling the maps section into view, then dump what
-                    # we can see. The source site lazy-loads the maps iframe; if we
+                    # we can see. batdongsan lazy-loads the maps iframe; if we
                     # extract before it materializes, lat/lng stays None.
                     print("  [debug] scrolling to bottom & sleeping 3s …")
                     await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")

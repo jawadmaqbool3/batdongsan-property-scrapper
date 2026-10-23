@@ -1,5 +1,5 @@
 """
-Property scraper.
+Batdongsan.com.vn scraper.
 
 - Uses Playwright (Chromium) to render JS-heavy pages and pass most Cloudflare
   passive checks. If Cloudflare shows an interactive challenge, run with
@@ -139,7 +139,7 @@ BASE_CATEGORIES = [
 ]
 
 # Suffix appended to each base category to filter listings to one city.
-# These slugs were discovered by typing the city name into the source site's
+# These slugs were discovered by typing the city name into batdongsan's
 # homepage search bar (#SuggestionSearch) and capturing the URL its
 # submit button produces — the pattern is "<city>-<provincecode>" (e.g.
 # vung-tau-vt = Vũng Tàu city in Bà Rịa-Vũng Tàu province). Three of the
@@ -286,7 +286,7 @@ def parse_int(text: str | None) -> int | None:
 
 
 def parse_posted_date(text: str | None) -> "datetime | None":
-    """Parse the source site's 'Ngày đăng' field. Common formats observed:
+    """Parse batdongsan's 'Ngày đăng' field. Common formats observed:
        '14/05/2026' or '14-05-2026', 'Hôm nay', 'Hôm qua', 'N ngày trước'.
        Returns midnight local time, or None if unparseable."""
     if not text:
@@ -483,7 +483,7 @@ async def text_of(page, selector: str) -> str | None:
 
     We deliberately avoid Playwright's Locator API here — its underlying CDP
     DOM probes (`DOM.describeNode`) crash with "CBOR: stack limit exceeded"
-    on the source site's heavy detail-page DOMs, returning None for every field.
+    on batdongsan's heavy detail-page DOMs, returning None for every field.
     page.evaluate returns a plain string, so it sidesteps CBOR entirely.
     Only standard CSS is supported (no Playwright `:has-text()` etc.).
     """
@@ -662,7 +662,7 @@ async def _human_click_at(page, box: dict, *, double: bool = True) -> bool:
 
     With `double=True` (default for phone reveals), a second click
     follows within 120-300ms — matching how a human typically reveals
-    AND copies the phone in one fluid motion on the source site. Real
+    AND copies the phone in one fluid motion on batdongsan. Real
     `mousemove` events fire on each interpolation step so the gesture
     looks human.
     """
@@ -897,7 +897,7 @@ async def extract_body_phone(page) -> str | None:
 
     Approach: simulate a real user click on the masked-phone span.
       - Get the span's bounding box via page.evaluate (avoids the CBOR
-        Locator crash that plagues the source site's heavy DOMs).
+        Locator crash that plagues batdongsan's heavy DOMs).
       - Move the mouse from an off-target start coord to a random point
         inside the span over ~25 steps so genuine `mousemove` events fire.
       - Brief hover pause (a real user reads the masked text first).
@@ -909,7 +909,7 @@ async def extract_body_phone(page) -> str | None:
         clicking — the per-account quota stays intact for the next run.
       - Random jitter BODY_PHONE_DELAY_MIN_SEC..MAX_SEC before the click.
 
-    Note: the per-account quota is enforced server-side by the source site. Even
+    Note: the per-account quota is enforced server-side by batdongsan. Even
     a perfectly-human click sequence still gets blocked once the quota is
     exhausted. The throttle exists to keep us under the ceiling.
     """
@@ -1211,7 +1211,7 @@ async def _extract_detail_fields(
 
     if lat is None:
         try:
-            # The maps iframe on the source site is lazy-loaded — until the user
+            # The maps iframe on batdongsan is lazy-loaded — until the user
             # scrolls it into view, `src=""` is empty and the real URL lives
             # in `data-src`. Read both so we don't depend on scroll order.
             iframe_srcs = await page.eval_on_selector_all(
@@ -1791,7 +1791,7 @@ LOGIN_URL = os.getenv("LOGIN_URL", "https://batdongsan.com.vn/sellernet/trang-da
 async def _is_logged_in(page) -> bool:
     """Definitive logged-in check: header user-avatar is rendered.
 
-    The source site injects `.js__avatar` (with class `re__avatar--xl` and an
+    batdongsan injects `.js__avatar` (with class `re__avatar--xl` and an
     inner `.re__avatar-text` initial) into the top-right header only when
     the user session cookie is valid. The header user-state is fetched
     via JS after DOMContentLoaded, so the avatar appears 0.5–2 s after
@@ -1813,7 +1813,7 @@ async def _human_type(page, locator, text: str) -> None:
 
     Avoids Locator.fill() which sets the field value in one shot and never
     fires keydown/keypress/input events — anti-bot scripts (incl. the one
-    behind the source site's login) flag that.
+    behind batdongsan's login) flag that.
     """
     await locator.click(timeout=5000)
     try:
@@ -1964,7 +1964,7 @@ async def _open_login_modal(page) -> bool:
     if not opened:
         return False
 
-    # Most source site modals open on the register tab. Switch to login.
+    # Most batdongsan modals open on the register tab. Switch to login.
     for sel in [
         '[class*="modal"] a:has-text("Đăng nhập")',
         '[class*="modal"] button:has-text("Đăng nhập")',
@@ -2044,7 +2044,7 @@ async def auto_login(ctx) -> bool:
         except PlaywrightTimeout:
             log.warning("Auto-login: %s timeout", LOGIN_URL)
 
-        # If we land somewhere OTHER than /sellernet/trang-dang-nhap, the source site
+        # If we land somewhere OTHER than /sellernet/trang-dang-nhap, batdongsan
         # bounced us away — the session in USER_DATA_DIR is already valid and
         # the avatar JS just took longer than _is_logged_in's poll window. In
         # that case skip the form-fill (there's no form on the dashboard) and
@@ -2131,7 +2131,7 @@ PROXY_COOLDOWN_SEC  = int(os.getenv("PROXY_COOLDOWN_SEC", "600"))  # 10 min
 
 # Chromium net errors that almost certainly mean "this proxy is bad" — used
 # to decide whether to cool the active proxy on a page crash. We deliberately
-# exclude ERR_TIMED_OUT here because source site sometimes hangs.
+# exclude ERR_TIMED_OUT here because batdongsan itself sometimes hangs.
 _PROXY_FAIL_PATTERNS = (
     "ERR_PROXY_CONNECTION_FAILED",
     "ERR_PROXY_AUTH",

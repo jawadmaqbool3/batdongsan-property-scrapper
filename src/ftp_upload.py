@@ -1,12 +1,12 @@
 """FTP image migrator — class + background loop in one file.
 
-Continuously finds rows in the DB whose images still point at the source site's
+Continuously finds rows in the DB whose images still point at batdongsan's
 CDN, downloads each image, uploads it to your FTP under
 `<FTP_REMOTE_ROOT>/<listing_code>/`, and rewrites the row's `large_image_paths`
 + `thumbnail_paths` to the public `<FTP_PUBLIC_BASE>/<listing_code>/...` URLs.
 
 Safe to interrupt and resume — only processes rows whose URLs still point at
-the source site, so re-runs only touch unmigrated rows.
+batdongsan, so re-runs only touch unmigrated rows.
 
 Layout on remote:
     <FTP_REMOTE_ROOT>/<listing_code>/img1.jpg     (large gallery, in order)
@@ -56,7 +56,7 @@ try:
 except ImportError:
     _SSL_CONTEXT = ssl.create_default_context()
 
-# The source site's CDN sometimes 403s default urllib UA.
+# batdongsan's CDN sometimes 403s default urllib UA.
 _DOWNLOAD_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -72,7 +72,7 @@ SLEEP_BETWEEN_LISTINGS_SEC = float(os.getenv("FTP_SLEEP_BETWEEN_LISTINGS_SEC", "
 SLEEP_WHEN_IDLE_SEC = float(os.getenv("FTP_SLEEP_WHEN_IDLE_SEC", "60"))
 
 # Per-image randomisation so every uploaded copy has a slightly different
-# pixel fingerprint than the source site's original. Toggle off with FTP_TRANSFORM=false.
+# pixel fingerprint than batdongsan's original. Toggle off with FTP_TRANSFORM=false.
 TRANSFORM_ENABLED = os.getenv("FTP_TRANSFORM", "true").lower() in ("1", "true", "yes", "on")
 JPEG_QUALITY = int(os.getenv("FTP_JPEG_QUALITY", "90"))
 
@@ -339,7 +339,7 @@ async def run_ftp_upload() -> None:
                 source_count = sum(1 for u in (large + thumb) if "batdongsan.com.vn" in u)
                 if not source_count:
                     continue
-                log.info("→ Listing %s: %d source-site images to migrate",
+                log.info("→ Listing %s: %d batdongsan images to migrate",
                          listing_code, source_count)
                 try:
                     new_large, new_thumb = await asyncio.to_thread(

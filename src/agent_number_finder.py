@@ -14,7 +14,7 @@ For every agent in DB whose `phone_number IS NULL`:
      (account, proxy) cool for COOLDOWN_SEC and switch to the next pair.
 
 Inputs:
-  data/accounts.csv     — username,password  (one row per source-site account)
+  data/accounts.csv     — username,password  (one row per batdongsan account)
   data/proxies.csv      — server,username,password  (one row per proxy)
 
 Run standalone:
@@ -178,7 +178,7 @@ async def login_with_account(ctx, account: dict) -> str:
         except Exception:
             pass
 
-        # If the persistent context already had a session, the source site
+        # If the persistent context already had a session, batdongsan
         # redirects away from /trang-dang-nhap to the dashboard.
         if "trang-dang-nhap" not in (page.url or "").lower():
             log.info("  already logged in (redirected away from login URL)")
@@ -323,7 +323,7 @@ async def _has_avatar(page) -> bool:
 
 async def _human_type(page, locator, text: str) -> None:
     """Type char-by-char via the GLOBAL keyboard with random 50-180ms delays.
-    Mirrors the legacy `_human_type` that the source site's login form accepts.
+    Mirrors the legacy `_human_type` that batdongsan's login form accepts.
 
     Locator.fill() or Locator.type() sometimes don't fire the keydown/input
     events the React controlled-input needs — typing through page.keyboard
@@ -435,7 +435,7 @@ async def process_one_agent(p, account: dict, proxy: dict, agent: tuple[str, str
 
     # The phone finder runs without a proxy — direct from this machine's IP.
     # Proxies add latency and weren't helping with the login flow. Accounts
-    # are rotated via `accounts.csv`; the source site rate-limits per account,
+    # are rotated via `accounts.csv`; batdongsan rate-limits per account,
     # not per IP, so the same exit IP is fine.
     ctx = await p.chromium.launch_persistent_context(
         user_dir,

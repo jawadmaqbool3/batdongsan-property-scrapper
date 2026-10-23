@@ -133,7 +133,7 @@ class PostgresStore:
 
     # ─── ftp_upload ────────────────────────────────────────────────────
     def pending_listings_for_ftp(self, limit: int = 100) -> list[tuple]:
-        """Rows whose image URLs still point at the source site."""
+        """Rows whose image URLs still point at batdongsan."""
         sql = (
             "SELECT listing_code, large_image_paths, thumbnail_paths "
             "FROM scrapy "

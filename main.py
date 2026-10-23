@@ -3,7 +3,7 @@
   1) Scraper          (src/scraper.py)            — walks categories, saves
                                                     listings with agent_id +
                                                     agent_url. No login.
-  2) FTP image upload (src/ftp_upload.py)         — migrates source-site
+  2) FTP image upload (src/ftp_upload.py)         — migrates batdongsan
                                                     image URLs to your FTP.
   3) Phone finder     (src/agent_number_finder.py)— logs in with rotating
                                                     accounts, reveals phones,

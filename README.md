@@ -12,6 +12,9 @@ designed to run as a long-lived daemon on Linux. The pipeline is idempotent:
 listings are deduplicated by `listing_code`, and re-runs refresh
 `last_seen_at` instead of creating duplicates.
 
+**Source marketplace:** [batdongsan.com.vn](https://batdongsan.com.vn)  
+**Agent profiles:** `guru.batdongsan.com.vn`
+
 ---
 
 ## Highlights
